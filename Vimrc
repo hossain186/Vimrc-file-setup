@@ -1,0 +1,110 @@
+" Initialize vim-plug plugin manager
+call plug#begin('~/.vim/plugged')
+
+" C++ and general development plugins
+Plug 'Valloric/YouCompleteMe'           " Auto-completion
+Plug 'scrooloose/nerdtree'              " File explorer
+Plug 'tpope/vim-fugitive'               " Git integration
+Plug 'vim-syntastic/syntastic'          " Syntax checking
+Plug 'junegunn/fzf.vim'                 " Fuzzy file finder
+Plug 'vim-airline/vim-airline'          " Status line
+Plug 'vim-airline/vim-airline-themes'   " Airline themes
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Advanced code completion (optional)
+Plug 'morhetz/gruvbox'                  " Gruvbox colorscheme
+
+call plug#end()
+
+" NERDTree plugin and keymaps
+" Map key to toggle NERDTree sidebar
+nnoremap <C-n> :NERDTreeToggle<CR>
+
+" Automatically close Vim if NERDTree is the last window
+autocmd vimenter * if !argc() | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && &filetype == "nerdtree") | q | endif
+
+" Set cursor color to white in Insert mode
+if has("termguicolors")
+  set termguicolors
+  highlight Cursor guifg=black guibg=white       " Normal mode cursor (block)
+  highlight iCursor guifg=white guibg=black      " Insert mode cursor (|)
+
+  " Adjust cursor settings for certain terminals
+  if $TERM =~ 'xterm-256color'
+    set t_Co=256
+  endif
+endif
+
+" Set the default colorscheme
+colorscheme gruvbox
+set background=dark  " or light, depending on your preference
+
+" Enable line numbers and relative line numbers
+set number
+set relativenumber
+set guicursor=i:ver25
+set backspace=indent,eol,start
+highlight Cursor guifg=black guibg=white
+            
+" Enable syntax highlighting
+syntax enable
+
+" Enable file type detection and plugin support
+filetype plugin indent on
+
+" C++ specific settings
+set smartindent
+set autoindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set scrolloff=4
+set lines=40      " Set the number of lines in the window
+set columns=120   " Set the number of columns in the window
+
+" Fast navigation and searching
+set incsearch
+set hlsearch
+
+" Ignore case in searches (but be smart about it)
+set ignorecase
+set smartcase
+
+if has("nvim") || has("termguicolors")
+  let &t_SI = "\e[6 q"  " Cursor for Insert mode (block)
+  let &t_SR = "\e[4 q"  " Cursor for Replace mode (underline)
+  let &t_EI = "\e[2 q"  " Cursor for Normal mode (block)
+endif
+
+" Enable fast I/O for competitive programming
+autocmd FileType cpp setlocal expandtab tabstop=4 shiftwidth=4 smarttab
+
+" Key mappings
+nnoremap <C-s> :w<CR>
+inoremap jj <Esc>
+nnoremap <leader>w :w!<CR>
+nnoremap <leader>q :q!<CR>
+nnoremap <leader>wq :wq!<CR>
+
+" Keymap to compile and run C++ code
+nnoremap <leader>r :w<CR>:!g++ % -o %:r && ./%:r<CR>
+
+" Keymap for NERDTree (already mapped above)
+nmap <C-n> :NERDTreeToggle<CR>
+
+" Insert template C++ file
+nnoremap <leader>cpp :r ~/vim_templates/cpp_template.h<CR>  " Insert template with space + t
+
+" Enable auto-pairing for quotes, parentheses, brackets, etc.
+inoremap " ""<Left>
+inoremap ' ''<Left>
+inoremap ( ()<Left>
+inoremap { {}<Left>
+inoremap [ []<Left>
+
+" For better handling of escaping and nested quotes/brackets
+autocmd FileType * inoremap <buffer> " ""<Left>
+autocmd FileType * inoremap <buffer> ' ''<Left>
+autocmd FileType * inoremap <buffer> ( ()<Left>
+autocmd FileType * inoremap <buffer> { {}<Left>
+autocmd FileType * inoremap <buffer> [ []<Left>
+
