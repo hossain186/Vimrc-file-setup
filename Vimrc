@@ -47,6 +47,8 @@ highlight Cursor guifg=black guibg=white
             
 " Enable syntax highlighting
 syntax enable
+" Map Enter to confirm completion if the completion menu is visible
+inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : "\<CR>"
 
 " Enable file type detection and plugin support
 filetype plugin indent on
@@ -88,8 +90,6 @@ nnoremap <leader>wq :wq!<CR>
 " Keymap to compile and run C++ code
 nnoremap <leader>r :w<CR>:!g++ % -o %:r && ./%:r<CR>
 
-" Keymap for NERDTree (already mapped above)
-nmap <C-n> :NERDTreeToggle<CR>
 
 " Insert template C++ file
 nnoremap <leader>cpp :r ~/vim_templates/cpp_template.h<CR>  " Insert template with space + t
@@ -100,6 +100,17 @@ inoremap ' ''<Left>
 inoremap ( ()<Left>
 inoremap { {}<Left>
 inoremap [ []<Left>
+
+" key map for nerdtree
+" Toggle NerdTree with <C-n>
+nnoremap <C-n> :NERDTreeToggle<CR>
+
+" Focus NerdTree if it's open
+nnoremap <C-b> :NERDTreeFocus<CR>
+
+" Return to the last edited file
+nnoremap <C-w> :NERDTreeToggle<CR>:wincmd p<CR>
+
 
 " For better handling of escaping and nested quotes/brackets
 autocmd FileType * inoremap <buffer> " ""<Left>
